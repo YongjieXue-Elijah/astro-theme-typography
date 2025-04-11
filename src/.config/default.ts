@@ -7,7 +7,7 @@ export const defaultConfig: ThemeConfig = {
   site: {
     title: '活版印字',
     subtitle: 'Typography',
-    author: 'Moeyua',
+    author: 'Yongjie Xue',
     description: 'Rediscory the beauty of typography',
     website: 'https://astro-theme-typography.vercel.app/',
     pageSize: 5,
@@ -56,7 +56,7 @@ export const defaultConfig: ThemeConfig = {
   },
   appearance: {
     theme: 'system',
-    locale: 'zh-cn',
+    locale: 'en-us',
     colorsLight: {
       primary: '#2e405b',
       background: '#ffffff',
