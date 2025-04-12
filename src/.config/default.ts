@@ -5,8 +5,8 @@ import type { ThemeConfig } from '~/types'
 
 export const defaultConfig: ThemeConfig = {
   site: {
-    title: '活版印字',
-    subtitle: 'Typography',
+    title: '凯龘牧歌',
+    subtitle: 'Dragon Pastoral',
     author: 'Yongjie Xue',
     description: 'Rediscory the beauty of typography',
     website: 'https://yongjie.netlify.app/',
