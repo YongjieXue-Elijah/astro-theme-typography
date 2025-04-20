@@ -61,7 +61,7 @@ Before exploring API and data model design, we'll study the communication protoc
 
 ## High-level design
 
-At a high-level we'd want to establish effective message passing between peers. This can be done via a peer-to-peer protocol, but that's not practical for a mobile app with flaky connection and tight power consumption constraints.
+At a high-level we'd want to establish effective message passing between peers. This can be done via a <span style="color: red;">peer-to-peer</span> protocol, but that's not practical for a mobile app with flaky connection and tight power consumption constraints.
 
 A more practical approach is to use a shared backend as a fan-out mechanism towards friends you want to reach:
 ![fan-out-backend](images/fan-out-backend.png)
