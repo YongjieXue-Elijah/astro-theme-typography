@@ -205,7 +205,7 @@ Another benefit of Google S2 is its region cover algorithm, which enables us to 
 There is no perfect solution, different companies adopt different solutions:
 ![company-adoptions](images/company-adoptions.png)
 
-Author suggest choosing geohashes or quadtree in an interview as those are easier to explain than Google S2.
+Author suggested choosing geohashes or quadtree in an interview as those are easier to explain than Google S2.
 
 Here's a quick summary of geohashes:
  * Easy to use and implement, no need to build a tree
