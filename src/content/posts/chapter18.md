@@ -3,7 +3,7 @@ title: Chapter18 - Nearby Friends
 pubDate: 2025-04-20
 categories: ['SystemDesign']
 description: ''
-slug: systemdesign
+# slug: systemdesign
 ---
 
 # Nearby Friends
@@ -26,7 +26,7 @@ Some questions to drive the interview:
 - I: Yes, it can be valuable for eg machine learning
 - C: Can we assume inactive friends will disappear from the feature in 10min
 - I: Yes
-- C: Do we need to worry about GDPR, etc?
+- C: Do we need to worry about privacy and data laws such as GDPR or CCPA?
 - I: No, for simlicity's sake
 
 ## Functional requirements
@@ -52,6 +52,10 @@ Some estimations to determine potential scale:
 - Location Update QPS = 10mil / 30 == ~334k updates per second
 
 # Step 2 - Propose High-Level Design and Get Buy-In
+
+- High-level design
+- API design
+- Data model
 
 Before exploring API and data model design, we'll study the communication protocol we'll use as it's less ubiquitous than traditional request-response communication model.
 
