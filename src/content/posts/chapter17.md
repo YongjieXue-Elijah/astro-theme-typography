@@ -1,9 +1,9 @@
 ---
-title: chapter17.
+title: Chapter17.
 pubDate: 2025-04-20
 categories: ['SystemDesign']
 description: ''
-slug: dev
+slug: SystemDesign
 ---
 
 # Proximity Service
