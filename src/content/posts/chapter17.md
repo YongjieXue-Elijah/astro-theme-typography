@@ -1,7 +1,7 @@
 ---
 title: Proximity Service.
 pubDate: 2025-04-20
-categories: ['System Design']
+categories: ['System-Design']
 description: ''
 slug: dev
 ---
