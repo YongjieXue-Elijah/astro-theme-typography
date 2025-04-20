@@ -1,10 +1,11 @@
 ---
-title: Proximity Service.
+title: chapter17.
 pubDate: 2025-04-20
-categories: ['System-Design']
+categories: ['SystemDesign']
 description: ''
 slug: dev
 ---
+
 # Proximity Service
 
 A proximity service enables you to discover nearby places such as restaurants, hotels, theatres, etc.
