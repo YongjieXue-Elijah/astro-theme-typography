@@ -208,6 +208,8 @@ Options to consider for determining map tiles:
 - alternatively, we can have simple API which calculates the map tile URLs on behalf of the clients at the cost of additional API call
   ![map-tile-url-calculation](images/chapter19/map-tile-url-calculation.png)
 
+Since we encode the grids in geohash, and there is one unique geohash per grid, computationally it is very efficient to go from the client's location (in latitude and longitude) and zoom level to the geohash, for the map tile. This calculation can be done on the client and we can fetch any static image tile from the CDN. For example, the URL for the image tile of Google headquarter could look like this: https://cdn.map-provider.com/tiles/9q9hvu.png
+
 # Step 3 - Design Deep Dive
 
 ## Data model
