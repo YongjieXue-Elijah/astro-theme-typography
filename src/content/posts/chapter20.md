@@ -19,10 +19,14 @@ Benefits of message queues:
 
 Some popular message queue implementations - Kafka, RabbitMQ, RocketMQ, Apache Pulsar, ActiveMQ, ZeroMQ.
 
-Strictly speaking, Kafka and Pulsar are not message queues. They are event streaming platforms.
+Strictly speaking, Kafka and Pulsar are not message queues(这几个不是MQ). They are event streaming platforms.
 There is however a convergence of features which blurs the distinction between message queues and event streaming platforms.
 
-In this chapter, we'll be building a message queue with support for more advanced features such as long data retention, repeated message consumption, etc.
+For example, RabbitMQ, which is a typical message queue, added an optional streams feature to allow repeated message consumption and long message retention, and its implementation uses an append-only log, much like an event streaming platform would.
+
+In this chapter, we will design a distributed message queue with <mark>additional features,
+such as long data retention, repeated consumption of messages, etc.</mark>, that are typ-
+ically only available on event streaming platforms.
 
 # Step 1 - Understand the problem and establish design scope
 
