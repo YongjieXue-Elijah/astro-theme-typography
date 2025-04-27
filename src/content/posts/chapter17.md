@@ -84,14 +84,14 @@ In this problem, the read volume is high because these features are commonly use
 On the other hand, write volume is low because we rarely change business information. Hence for a read-heavy workflow, a relational database such as MySQL is ideal.
 
 In terms of schema, we'll need one main `business` table which holds information about a business:
-![business-table](images/business-table.png)
+![business-table](images/chapter17/business-table.png)
 
 We'll also need a geo-index table so that we efficiently process spatial operations. This table will be discussed later when we introduce the concept of geohashes.
 
 ## High-level design
 
 Here's a high-level overview of the system:
-![high-level-design](images/high-level-deisgn.png)
+![high-level-design](images/chapter17/high-level-deisgn.png)
 
 - The load balancer automatically distributes incoming traffic across multiple services. A company typically provides a single DNS entry point and internally routes API calls to appropriate services based on URL paths.
 - Location-based service (LBS) - read-heavy, stateless service, responsible for serving read requests for nearby businesses
@@ -108,7 +108,7 @@ Let's explore how these databases work and what other alternative algorithms the
 ### Two-dimensional search
 
 The most intuitive and naive approach to solving this problem is to draw a circle around the person and fetch all businesses within the circle's radius:
-![2d-search](images/2d-search.png)
+![2d-search](images/chapter17/2d-search.png)
 
 This can easily be translated to a SQL query:
 
@@ -122,24 +122,24 @@ WHERE (latitude BETWEEN {:my_lat} - radius AND {:my_lat} + radius) AND
 This query is not efficient because we need to query the whole table. An alternative is to build an index on the longitude and latitude columns but that won't improve performance by much.
 
 This is because we still need to subsequently filter a lot of data regardless of whether we index by long or lat:
-![2d-query-problem](images/2d-query-problem.png)
+![2d-query-problem](images/chapter17/2d-query-problem.png)
 
 We can, however, build 2D indexes and there are different approaches to that:
-![2d-index-options](images/2d-index-options.png)
+![2d-index-options](images/chapter17/2d-index-options.png)
 
 We'll discuss the ones highlighted in purple - geohash, quadtree and google S2 are the most popular approaches.
 
 ### Evenly divided grid
 
 Another option is to divide the world in small grids:
-![evenly-divided-grid](images/evenly-divided-grid.png)
+![evenly-divided-grid](images/chapter17/evenly-divided-grid.png)
 
 The major flaw with this approach is that business distribution is uneven as there are a lot of businesses concentrated in new york and close to zero in the sahara desert.
 
 ### Geohash
 
 Geohash works similarly to the previous approach, but it recursively divides the world into smaller and smaller grids, where each two bits correspond to a single quadrant:
-![geohash-example](images/geohash-example.png)
+![geohash-example](images/chapter17/geohash-example.png)
 
 Geohashes are typically represented in base32. Here's the example geohash of google headquarters:
 
@@ -148,33 +148,33 @@ Geohashes are typically represented in base32. Here's the example geohash of goo
 ```
 
 It supports 12 levels of precision, but we only need up to 6 levels for our use-case:
-![geohash-precision](images/geohash-precision.png)
+![geohash-precision](images/chapter17/geohash-precision.png)
 
 Geohashes enable us to quickly locate neighboring regions based on a substring of the geohash:
-![geohash-substring](images/geohash-substrint.png)
+![geohash-substring](images/chapter17/geohash-substrint.png)
 
 However, one issue \w geohashes is that there can be places which are very close to each other which don't share any prefix, because they're on different sides of the equator or meridian:
-![boundary-issue-geohash](images/boundary-issue-geohash.png)
+![boundary-issue-geohash](images/chapter17/boundary-issue-geohash.png)
 
 Another issue is that two businesses can be very close but not share a common prefix because they're in different quadrants:
-![geohash-boundary-issue-2](images/geohash-boundary-issue-2.png)
+![geohash-boundary-issue-2](images/chapter17/geohash-boundary-issue-2.png)
 
 This can be mitigated by fetching neighboring geohashes, not just the geohash of the user.
 
 A benefit of using geohashes is that we can use them to easily implement the bonus problem of increasing search radius in case insufficient businesses are fetched via query:
-![geohash-expansion](images/geohash-expansion.png)
+![geohash-expansion](images/chapter17/geohash-expansion.png)
 
 This can be done by removing the last letter of the target geohash to increase radius.
 
 ### Quadtree
 
 A quadtree is a data structure, which recursively subdivides quadrants as deep as it needs to, based on business needs:
-![quadtree-example](images/quadtree-example.png)
+![quadtree-example](images/chapter17/quadtree-example.png)
 
 This is an in-memory solution which can't easily be implemented in a database.
 
 Here's how it might look conceptually:
-![quadtree-concept](images/quadtree-concept.png)
+![quadtree-concept](images/chapter17/quadtree-concept.png)
 
 Example pseudocode to build a quadtree:
 
@@ -212,15 +212,15 @@ Another consideration is how to update the quadtree. Given our requirements, a g
 It is nevertheless possible to update the quadtree on the fly, but that would complicate the implementation significantly.
 
 Example quadtree of Denver:
-![denver-quadtree](images/denver-quadtree.png)
+![denver-quadtree](images/chapter17/denver-quadtree.png)
 
 ### Google S2
 
 Google S2 is a geometry library, which supports mapping 2D points on a 1D plane using hilbert curves. Objects close to each other on the 2D plane are close on the hilbert curve as well:
-![hilbert-curve](images/hilbert-curbe.png)
+![hilbert-curve](images/chapter17/hilbert-curbe.png)
 
 This library is great for geofencing, which supports covering arbitrary areas vs. confining yourself to specific quadrants.
-![geofence-example](images/geofence-example.png)
+![geofence-example](images/chapter17/geofence-example.png)
 
 This functionality can be used to support more advanced use-cases than nearby businesses.
 
@@ -229,7 +229,7 @@ Another benefit of Google S2 is its region cover algorithm, which enables us to 
 ### Recommendation
 
 There is no perfect solution, different companies adopt different solutions:
-![company-adoptions](images/company-adoptions.png)
+![company-adoptions](images/chapter17/company-adoptions.png)
 
 Author suggest choosing geohashes or quadtree in an interview as those are easier to explain than Google S2.
 
@@ -256,7 +256,7 @@ Let's dive deeper into some areas of the design.
 The business table can be scaled by sharding it in case it doesn't fit in a single server instance.
 
 The geohash table can be represented by two columns:
-![geohash-table-example](images/geohash-table-example.png)
+![geohash-table-example](images/chapter17/geohash-table-example.png)
 
 We don't need to shard the geohash table as we don't have that much data. We calculated that it takes ~1.7gb to build a quad tree and geohash space usage is similar.
 
@@ -301,7 +301,7 @@ We could also cache `business_id -> business_data` as users could often query th
 ## Region and availability zones
 
 We can deploy multiple LBS service instances across the globe so that users query the instance closest to them. This leads to reduced latency;
-![cross-dc-deployment](images/cross-dc-deployment.png)
+![cross-dc-deployment](images/chapter17/cross-dc-deployment.png)
 
 It also enables us to spread traffic evenly across the globe. This could also be required in order to comply with certain data privacy laws.
 
@@ -311,7 +311,7 @@ Once businesses are filtered, the result set is going to be small, hence, it is 
 
 ## Final design diagram
 
-![final-design](images/final-design.png)
+![final-design](images/chapter17/final-design.png)
 
 - Client tries to locate restaurants within 500meters of their location
 - Load balancer forwards the request to the LBS

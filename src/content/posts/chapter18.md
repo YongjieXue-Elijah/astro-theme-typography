@@ -64,7 +64,7 @@ Before exploring API and data model design, we'll study the communication protoc
 At a high-level we'd want to establish effective message passing between peers. This can be done via a <span style="color: red;">peer-to-peer</span> protocol, but that's not practical for a mobile app with flaky connection and tight power consumption constraints.
 
 A more practical approach is to use a shared backend as a fan-out mechanism towards friends you want to reach:
-![fan-out-backend](images/fan-out-backend.png)
+![fan-out-backend](images/chapter18/fan-out-backend.png)
 
 What does the backend do?
 
@@ -75,7 +75,7 @@ What does the backend do?
 This sounds simple but the challenge is to design the system for the scale we're operating with.
 
 We'll start with a simpler design at first and discuss a more advanced approach in the deep dive:
-![simple-high-level-design](images/simple-high-level-design.png)
+![simple-high-level-design](images/chapter18/simple-high-level-design.png)
 
 - The load balancer spreads traffic across rest API servers as well as bidirectional web socket servers
 - The rest API servers handles auxiliary tasks such as managing friends, updating profiles, etc
@@ -84,14 +84,14 @@ We'll start with a simpler design at first and discuss a more advanced approach 
 - User database stores user and friendship data. Either a relational or NoSQL database can be used for this purpose.
 - Location history database stores a history of user location data, not necessarily used directly within nearby friends feature, but instead used to track historical data for analytical purposes
 - Redis pubsub is used as a lightweight message bus which enables different topics for each user channel for location updates.
-  ![redis-pubsub-usage](images/redis-pubsub-usage.png)
+  ![redis-pubsub-usage](images/chapter18/redis-pubsub-usage.png)
 
 In the above example, websocket servers subscribe to channels for the users which are connected to them & forward location updates whenever they receive them to appropriate users.
 
 ## Periodic location update
 
 Here's how the periodic location update flow works:
-![periodic-location-update](images/periodic-location-update.png)
+![periodic-location-update](images/chapter18/periodic-location-update.png)
 
 - Mobile client sends a location update to the load balancer
 - Load balancer forwards location update to the websocket server's persistent connection for that client
@@ -102,7 +102,7 @@ Here's how the periodic location update flow works:
 - Subscribed web socket servers receive location update, calculate which users the update should be sent to and sends it
 
 Here's a more detailed version of the same flow:
-![detailed-periodic-location-update](images/detailed-periodic-location-update.png)
+![detailed-periodic-location-update](images/chapter18/detailed-periodic-location-update.png)
 
 On average, there's going to be 40 location updates to forward as a user has 400 friends on average and 10% of them are online at a time.
 
@@ -147,7 +147,7 @@ Hence, we'll need a distributed redis server cluster to handle the intense CPU l
 In order to support a distributed redis cluster, we'll need to utilize a service discovery component, such as zookeeper or etcd, to keep track of which servers are alive.
 
 What we need to encode in the service discovery component is this data:
-![channel-distribution-data](images/channel-distribution-data.png)
+![channel-distribution-data](images/chapter18/channel-distribution-data.png)
 
 Web socket servers use that encoded data, fetched from zookeeper to determine where a particular channel lives. For efficiency, the hash ring data can be cached in-memory on each websocket server.
 
@@ -160,7 +160,7 @@ We have to be mindful of some potential issues during scaling operations:
 - There will be a lot of resubscription requests from the web socket servers due to channels being moved around
 - Some location updates might be missed from clients during the operation, which is acceptable for this problem, but we should still minimize it from happening. Consider doing such operation when traffic is at lowest point of the day.
 - We can leverage consistent hashing to minimize amount of channels moved in the event of adding/removing servers
-  ![consistent-hashing](images/consistent-hashing.png)
+  ![consistent-hashing](images/chapter18/consistent-hashing.png)
 
 ## Adding/removing friends
 
@@ -179,13 +179,13 @@ The websocket server handling the "whale" user might have a higher load on its e
 What if the interviewer wants to update the design to include a feature where we can occasionally see a random person pop up on our nearby friends map?
 
 One way to handle this is to define a pool of pubsub channels, based on geohash:
-![geohash-pubsub](images/geohash-pubsub.png)
+![geohash-pubsub](images/chapter18/geohash-pubsub.png)
 
 Anyone within the geohash subscribes to the appropriate channel to receive location updates for random users:
-![location-updates-geohash](images/location-updates-geohash.png)
+![location-updates-geohash](images/chapter18/location-updates-geohash.png)
 
 We could also subscribe to several geohashes to handle cases where someone is close but in a bordering geohash:
-![geohash-borders](images/geohash-borders.png)
+![geohash-borders](images/chapter18/geohash-borders.png)
 
 ## Alternative to Redis pub/sub
 
