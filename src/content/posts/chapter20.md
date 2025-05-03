@@ -100,7 +100,7 @@ What if the data volume for a topic is too large? One way to scale is by splitti
 ![partitions](images/chapter20/partitions.png)
 
 - Messages sent to a topic are evenly distributed across partitions
-- The servers that host partitions are called <mark>brokers</mark>
+- The servers that host partitions are called brokers
 - Each topic operates like a queue using FIFO for message processing. Message order is preserved within a partition.
 - The position of a message within the partition is called an **offset**.
 - Each message produced is sent to a specific partition. A partition key specifies which partition a message should land in.
@@ -182,7 +182,7 @@ Other message files:
 - Size - the size of this message
 - CRC - checksum to ensure message integrity
 
-To support additional features, some optional fields can be added on demand. For example, messages can be filtered by tags, if tags are part of the optional fields.
+Additional features such as filtering can be supported by adding additional fields.
 
 ## Batching
 
