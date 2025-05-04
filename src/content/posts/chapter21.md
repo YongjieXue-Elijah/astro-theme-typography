@@ -173,7 +173,7 @@ Here's how the pull model might look like:
 For this solution, the metrics collector needs to maintain an up-to-date list of services and metrics endpoints.
 We can use Zookeeper or etcd for that purpose - service discovery.
 
-Service discovery contains contains configuration rules about when and where to collect metrics from:
+Service discovery contains configuration rules about when and where to collect metrics from:
 ![service-discovery-example](images/chapter21/service-discovery-example.png)
 
 Here's a detailed explanation of the metrics collection flow:
