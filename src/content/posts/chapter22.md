@@ -69,10 +69,12 @@ In this section, we discuss query API design, data model and high-level design.
 The API is a contract between the client and the server. In our case, the client is the dashboard user - data scientist/analyst, advertiser, etc.
 
 Here's our functional requirements:
+<mark>
 
 - Aggregate the number of clicks of `ad_id` in the last Y minutes
 - Return top N most clicked `ad_id` in the last M minutes
 - Support aggregation filtering by different attributes
+  </mark>
 
 We need two endpoints to achieve those requirements. Filtering can be done via query parameters on one of them.
 
