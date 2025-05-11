@@ -205,6 +205,7 @@ As well as top N clicked ads aggregated per minute:
 |--------------------|------------------|
 
 The second message queue is there in order to achieve end to end exactly-once atomic commit semantics:
+<mark>Kafka achieves atomic commit (and thus end-to-end exactly-once semantics) by layering a lightweight two-phase-commit protocol on top of its normal log-append operations. </mark>
 ![atomic-commit](images/chapter22/atomic-commit.png)
 
 For the aggregation service, using the MapReduce framework is a good option:
