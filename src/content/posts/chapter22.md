@@ -376,7 +376,7 @@ There are three delivery guarantees we can use - at-most-once, at-least-once and
 
 In most circumstances, at-least-once is sufficient when a small amount of duplicates is acceptable.
 This is not the case for our system, though, as a difference in small percent can result in millions of dollars of discrepancy.
-Hence, we'll need to use exactly-once delivery semantics.
+<mark>Hence, we'll need to use exactly-once delivery semantics.</mark>
 
 ## Data deduplication
 
