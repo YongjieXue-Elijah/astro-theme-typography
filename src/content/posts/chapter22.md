@@ -332,6 +332,7 @@ There is no perfect solution, we need to consider trade-offs:
 Since data accuracy is important, we'll use the event time for aggregation.
 
 To mitigate the issue of delayed events, a technique called "watermark" can be leveraged.
+<mark>Notice that the watermark technique does not handle events that have long delays. </mark>
 
 In the example below, event 2 misses the window where it needs to be aggregated:
 ![watermark-technique](images/chapter22/watermark-technique.png)
