@@ -57,6 +57,7 @@ This API Design focuses on the core endpoints (using RESTful practices), we'll n
 
 A fully-fledged system would require a more extensive API with support for searching for rooms based on lots of criteria, but we won't be focusing on that in this section.
 Reason is that they aren't technically challenging, so they're out of scope.
+<mark>UI elements you “just get” without guidance—think autocomplete, swipe-to-delete, pull-to-refresh, and filter chips.</mark>
 
 **Hotel-related API**
 
@@ -132,7 +133,7 @@ We've chosen a microservice architecture for this design. It has gained great po
 - Users book a hotel room on their phone or computer
 - Admin perform administrative functions such as refunding/cancelling a payment, etc
 - CDN caches static resources such as JS bundles, images, videos, etc
-- Public API Gateway - fully-managed service which supports rate limiting, authentication, etc.
+- Public API Gateway - fully-managed service which supports rate limiting, authentication, etc. <mark>API Gateway is a specialized reverse proxy. It sits between clients and your backend services and forwards (or “proxies”) incoming requests to the appropriate service. </mark>
 - Internal APIs - only visible to authorized personnel. Usually protected by a VPN.
 - Hotel service - provides detailed information about hotels and rooms. Hotel and room data is static, so it can be cached aggressively.
 - Rate service - provides room rates for different future dates. An interesting note about this domain is that prices depend on how full a hotel is at a given day.
