@@ -15,19 +15,19 @@ const dark = themeConfig.appearance.theme === 'dark'
 
 <html lang={lang} class:list={['animation-prepared', { dark }]}>
   <head>
-    <slot name="seo"> <SiteSeo /> </slot>
+    <slot name="seo"><SiteSeo /></slot>
     <LaTeX />
     <Analytics />
     <ThemeScript />
+
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G99193Z99E"></script>
-    <script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-G99193Z99E"></script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || []
       function gtag(...args) {
-        dataLayer.push(args)
+        window.dataLayer.push(args)
       }
       gtag('js', new Date())
-
       gtag('config', 'G-G99193Z99E')
     </script>
   </head>
