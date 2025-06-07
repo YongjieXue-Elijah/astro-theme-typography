@@ -51,6 +51,10 @@ There are various protocols used for sending and receiving emails:
 Apart from the mailing protocol, there are some DNS records we need to configure for our email server - the MX records:
 ![dns-lookup](images/chapter24/dns-lookup.png)
 
+The priority numbers indicate preferences, where the mail server with a lower priority
+number is more preferred. (Just like queue in SIP) If the connection fails, the sending mail server will attempt to connect to the
+mail server with the next lowest priority
+
 Email attachments are sent base64-encoded and there is usually a size limit of 25mb on most mail services.
 This is configurable and varies from individual to corporate accounts.
 
